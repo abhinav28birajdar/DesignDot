@@ -1,25 +1,10 @@
-"use client";
+"use client"
 
-import React from "react";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/enhanced-button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Sparkles,
-  Palette,
-  Zap,
-  Target,
-  Users,
-  TrendingUp,
-  ArrowRight,
-  Play,
-  Star,
-  CheckCircle,
-  Brain,
-  ChevronRight,
-  Quote,
-} from "lucide-react";
+import React from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ChevronRight, Play, Star, Sparkles, Zap, Users, Palette, Brain, Globe, ArrowRight, CheckCircle, Quote } from "lucide-react"
+import { Button } from "@/components/ui/aakar-button"
+import Link from "next/link"
 
 const HomePage: React.FC = () => {
   const [currentTestimonial, setCurrentTestimonial] = React.useState(0)
