@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Design.ly: The AI-Powered Creative Engine
 
-## Getting Started
+![Design.ly Logo](https://via.placeholder.com/800x200/9929EA/FFFFFF?text=Design.ly+-+The+AI-Powered+Creative+Engine)
 
-First, run the development server:
+## 🎨 Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Design.ly** is a revolutionary, full-stack generative AI design platform meticulously engineered for boundless creativity. Through its sleek, intuitive UI accented by a vibrant **#9929EA purple**, Design.ly seamlessly integrates cutting-edge **Google Gemini AI** for multi-modal content generation and a powerful **Supabase backend** for secure data persistence and blazing-fast asset storage.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### ✨ Your Vision. Our AI. Unbounded Creativity.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Beyond simple automation, Design.ly provides:
+- 🧠 **Deep creative control** with intelligent AI assistance
+- 📊 **Intelligent trend insights** and adaptive learning
+- 🎯 **Brand-consistent visuals** across all design disciplines
+- 🚀 **Real-time collaboration** and instant generation
+- 🎨 **Comprehensive design modes** from branding to motion graphics
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🌟 Key Features
 
-## Learn More
+### 🤖 AI-Powered Design Generation
+- **Google Gemini Integration**: Advanced text-to-image and multimodal AI
+- **Intelligent Prompting**: AI-enhanced prompt suggestions and refinement
+- **Style Transfer**: Apply sophisticated design styles with AI precision
+- **Brand Intelligence**: Maintain perfect brand consistency automatically
 
-To learn more about Next.js, take a look at the following resources:
+### 🎨 Comprehensive Design Modes
+1. **Design Assets** - Social media, posters, advertisements
+2. **Branding & Identity** - Logos, brand guidelines, business kits
+3. **UI/UX Concepts** - App interfaces, web designs, component libraries
+4. **Product & Packaging** - 3D mockups, labels, product visualization
+5. **Editorial & Publication** - Layouts, blog graphics, newsletters
+6. **Data Storytelling** - Infographics, charts, data visualization
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🛠️ Professional Tools
+- **Interactive Canvas Editor** with drag-and-drop functionality
+- **Real-time Collaboration** with team workspace features
+- **Version Control** with comprehensive design history
+- **Export Formats**: PNG, PDF, SVG, and more
+- **Brand Management** with guideline enforcement
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Quick Start
 
-## Deploy on Vercel
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Supabase account
+- Google Cloud account (for Gemini API)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Installation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/abhinav28birajdar/DesignDot.git
+   cd DesignDot
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup**
+   Create a `.env.local` file:
+   ```env
+   # Supabase Configuration
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   
+   # Google Gemini AI
+   GOOGLE_AI_API_KEY=your_gemini_api_key
+   
+   # Application
+   NEXTAUTH_SECRET=your_nextauth_secret
+   NEXTAUTH_URL=http://localhost:3000
+   ```
+
+4. **Database Setup**
+   ```bash
+   # Run the schema SQL file in your Supabase SQL editor
+   # Located at: database/schema.sql
+   ```
+
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🎨 Design System
+
+### Color Palette
+- **Primary**: `#9929EA` (Design.ly Purple) - Magic, creativity, innovation
+- **Secondary**: `#34D399` (Design.ly Emerald) - Growth, success, harmony
+- **Dark UI**: `#1A1A1A` (Near Black) - Sophisticated, modern background
+- **Panels**: `#2C2C2C` (Dark Grey) - Content separation and elevation
+
+### Typography
+- **Headlines**: Plus Jakarta Sans - Strong, geometric impact
+- **Body Text**: Inter - Highly legible, versatile readability

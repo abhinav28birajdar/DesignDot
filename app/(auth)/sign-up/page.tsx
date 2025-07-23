@@ -55,11 +55,11 @@ export default function SignUpPage() {
     <div className="w-full max-w-md">
       <div className="text-center mb-8">
         <div className="flex justify-center mb-4">
-          <div className="bg-orange-600 p-3 rounded-lg">
+          <div className="bg-designly-purple-500 p-3 rounded-lg">
             <Palette className="h-8 w-8 text-white" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900">Join Aakar</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Join Design.ly</h1>
         <p className="text-gray-600 mt-2">Create your account and start designing with AI</p>
       </div>
 
@@ -128,7 +128,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700" disabled={loading}>
+            <Button type="submit" className="w-full bg-designly-purple-500 hover:bg-designly-purple-600" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -143,7 +143,7 @@ export default function SignUpPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
-              <Link href="/sign-in" className="text-orange-600 hover:text-orange-700 font-medium">
+              <Link href="/sign-in" className="text-designly-purple-500 hover:text-designly-purple-600 font-medium">
                 Sign in here
               </Link>
             </p>

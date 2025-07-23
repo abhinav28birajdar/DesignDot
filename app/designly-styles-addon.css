@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Design.ly Custom Styles */
+
+/* Design.ly Brand Variables */
+:root {
+  --designly-purple-50: hsl(255, 100%, 98%);
+  --designly-purple-100: hsl(252, 100%, 95%);
+  --designly-purple-200: hsl(251, 91%, 92%);
+  --designly-purple-300: hsl(250, 95%, 85%);
+  --designly-purple-400: hsl(252, 94%, 76%);
+  --designly-purple-500: hsl(273, 80%, 57%);
+  --designly-purple-600: hsl(255, 84%, 58%);
+  --designly-purple-700: hsl(258, 70%, 50%);
+  --designly-purple-800: hsl(259, 70%, 42%);
+  --designly-purple-900: hsl(260, 67%, 35%);
+  
+  --designly-emerald-50: hsl(156, 73%, 96%);
+  --designly-emerald-100: hsl(152, 76%, 91%);
+  --designly-emerald-200: hsl(152, 77%, 80%);
+  --designly-emerald-300: hsl(151, 72%, 67%);
+  --designly-emerald-400: hsl(158, 64%, 52%);
+  --designly-emerald-500: hsl(160, 84%, 39%);
+  --designly-emerald-600: hsl(161, 94%, 30%);
+  --designly-emerald-700: hsl(163, 94%, 24%);
+  --designly-emerald-800: hsl(163, 88%, 20%);
+  --designly-emerald-900: hsl(164, 86%, 16%);
+}
+
+/* Custom Utility Classes */
+.designly-gradient {
+  background: linear-gradient(135deg, var(--designly-purple-500) 0%, var(--designly-purple-600) 100%);
+}
+
+.designly-text-gradient {
+  background: linear-gradient(135deg, var(--designly-purple-500) 0%, var(--designly-emerald-400) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.designly-purple-glow {
+  box-shadow: 0 0 20px rgba(153, 41, 234, 0.3);
+}
+
+.designly-hover-lift {
+  transition: all 0.2s ease-in-out;
+}
+
+.designly-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(153, 41, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(153, 41, 234, 0.5);
+  }
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Background patterns */
+.bg-grid-slate-100 {
+  background-image: linear-gradient(rgba(100, 116, 139, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(100, 116, 139, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Utility classes for Design.ly */
+.almost-white {
+  color: #fefefe;
+}
+
+.light-slate {
+  color: #f1f5f9;
+}
+
+.dark-slate {
+  color: #0f172a;
+}
+
+/* Custom shadows */
+.designly-shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.designly-shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.designly-shadow-md {
+  box-shadow: 0 6px 10px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.designly-shadow-lg {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Custom Form Elements */
+.designly-input-focus {
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.designly-input-focus:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px hsla(var(--primary), 0.2);
+}
+
+/* AI Component Styles */
+.designly-ai-badge {
+  background: linear-gradient(135deg, #ff4d4d 0%, #f9cb28 100%);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}

@@ -8,7 +8,7 @@ export default function AuthLayout({
 }) {
   return (
     <AuthGuard requireAuth={false}>
-      <div className="min-h-screen gradient-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-designly-purple-500/10 to-designly-emerald-400/10 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         {children}
       </div>
     </AuthGuard>

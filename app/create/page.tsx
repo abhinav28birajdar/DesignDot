@@ -1,443 +1,499 @@
-"use client";
+"use client"
 
-import React from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/enhanced-button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Sparkles,
-  Palette,
-  Monitor,
-  Smartphone,
-  FileText,
-  Image,
-  Zap,
-  Target,
+import React, { useState } from "react"
+import { Navbar } from "@/components/layout/Navbar"
+import { Footer } from "@/components/layout/Footer"
+import { AuthGuard } from "@/components/layout/AuthGuard"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import Link from "next/link"
+import { 
+  ArrowLeft, 
+  Sparkles, 
+  Target, 
+  Layers, 
+  Calendar, 
+  Share2, 
+  Palette, 
   Wand2,
-  ArrowRight,
+  Upload,
+  Type,
+  Image as ImageIcon,
+  Zap,
+  Settings,
+  Download,
+  Eye,
+  RefreshCw,
   Plus,
-  X,
-} from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+  ChevronRight,
+  Crown,
+  Rocket,
+  Check,
+  FileText
+} from "lucide-react"
 
-const designModes = [
+const projectTypes = [
   {
-    id: "branding",
-    title: "Branding & Identity",
-    description: "Logo design, brand guidelines, and visual identity systems",
-    icon: Palette,
-    gradient: "from-purple-500 to-pink-600",
+    id: 'logo',
+    name: 'Logo Design',
+    description: 'Create unique brand logos with AI assistance',
+    icon: <Target className="h-8 w-8" />,
+    gradient: 'from-purple-500 to-pink-500',
+    popular: true
   },
   {
-    id: "ui_ux",
-    title: "UI/UX Design",
-    description: "Web interfaces, mobile apps, and user experience designs",
-    icon: Monitor,
-    gradient: "from-blue-500 to-cyan-600",
+    id: 'banner',
+    name: 'Banner & Ads',
+    description: 'Marketing banners for web and social media',
+    icon: <Layers className="h-8 w-8" />,
+    gradient: 'from-blue-500 to-cyan-500',
+    popular: false
   },
   {
-    id: "social_media",
-    title: "Social Media",
-    description: "Posts, stories, covers, and social media graphics",
-    icon: Smartphone,
-    gradient: "from-green-500 to-emerald-600",
+    id: 'poster',
+    name: 'Poster Design',
+    description: 'Eye-catching posters for events and promotions',
+    icon: <Calendar className="h-8 w-8" />,
+    gradient: 'from-green-500 to-teal-500',
+    popular: false
   },
   {
-    id: "print",
-    title: "Print Design",
-    description: "Flyers, brochures, business cards, and print materials",
-    icon: FileText,
-    gradient: "from-orange-500 to-red-600",
+    id: 'social-media',
+    name: 'Social Media',
+    description: 'Instagram, Facebook, and Twitter post templates',
+    icon: <Share2 className="h-8 w-8" />,
+    gradient: 'from-orange-500 to-red-500',
+    popular: true
   },
   {
-    id: "web_banner",
-    title: "Web Banners",
-    description: "Display ads, web banners, and digital marketing materials",
-    icon: Image,
-    gradient: "from-indigo-500 to-purple-600",
+    id: 'web-design',
+    name: 'Web Graphics',
+    description: 'Website headers, buttons, and UI elements',
+    icon: <Palette className="h-8 w-8" />,
+    gradient: 'from-indigo-500 to-purple-500',
+    popular: false
   },
-];
+  {
+    id: 'branding',
+    name: 'Brand Package',
+    description: 'Complete branding kit with multiple assets',
+    icon: <Crown className="h-8 w-8" />,
+    gradient: 'from-yellow-500 to-orange-500',
+    popular: true
+  }
+]
 
-const designStyles = [
-  { id: "minimalist", name: "Minimalist", description: "Clean, simple, and focused" },
-  { id: "modern", name: "Modern", description: "Contemporary and sleek" },
-  { id: "vintage", name: "Vintage", description: "Classic and timeless" },
-  { id: "playful", name: "Playful", description: "Fun and energetic" },
-  { id: "elegant", name: "Elegant", description: "Sophisticated and refined" },
-  { id: "bold", name: "Bold", description: "Strong and impactful" },
-  { id: "corporate", name: "Corporate", description: "Professional and trustworthy" },
-  { id: "creative", name: "Creative", description: "Artistic and innovative" },
-];
+const aiModes = [
+  {
+    id: 'quick',
+    name: 'Quick Generate',
+    description: 'Fast AI generation with minimal input',
+    icon: <Zap className="h-6 w-6" />,
+    time: '30 seconds',
+    quality: 'Good',
+    free: true
+  },
+  {
+    id: 'enhanced',
+    name: 'Enhanced Mode',
+    description: 'Higher quality with more customization',
+    icon: <Sparkles className="h-6 w-6" />,
+    time: '2-3 minutes',
+    quality: 'Excellent',
+    free: false
+  },
+  {
+    id: 'professional',
+    name: 'Professional',
+    description: 'Premium quality with advanced AI models',
+    icon: <Crown className="h-6 w-6" />,
+    time: '5-10 minutes',
+    quality: 'Professional',
+    free: false
+  }
+]
 
-const platforms = [
-  { id: "instagram_post", name: "Instagram Post", dimensions: "1080 × 1080", platform: "Instagram" },
-  { id: "instagram_story", name: "Instagram Story", dimensions: "1080 × 1920", platform: "Instagram" },
-  { id: "facebook_post", name: "Facebook Post", dimensions: "1200 × 630", platform: "Facebook" },
-  { id: "linkedin_post", name: "LinkedIn Post", dimensions: "1200 × 627", platform: "LinkedIn" },
-  { id: "twitter_header", name: "Twitter Header", dimensions: "1500 × 500", platform: "Twitter" },
-  { id: "a4_flyer", name: "A4 Flyer", dimensions: "210 × 297 mm", platform: "Print" },
-  { id: "business_card", name: "Business Card", dimensions: "89 × 51 mm", platform: "Print" },
-  { id: "web_banner", name: "Web Banner", dimensions: "728 × 90", platform: "Web" },
-  { id: "custom", name: "Custom Size", dimensions: "Custom", platform: "Custom" },
-];
+export default function CreateProjectPage() {
+  const [selectedType, setSelectedType] = useState<string>('')
+  const [selectedMode, setSelectedMode] = useState<string>('quick')
+  const [projectName, setProjectName] = useState('')
+  const [description, setDescription] = useState('')
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [step, setStep] = useState(1)
 
-export default function CreatePage() {
-  const { user } = useAuth();
-  const router = useRouter();
-  
-  const [selectedMode, setSelectedMode] = React.useState("");
-  const [selectedStyle, setSelectedStyle] = React.useState("");
-  const [selectedPlatform, setSelectedPlatform] = React.useState("");
-  const [projectName, setProjectName] = React.useState("");
-  const [brief, setBrief] = React.useState("");
-  const [keywords, setKeywords] = React.useState<string[]>([]);
-  const [newKeyword, setNewKeyword] = React.useState("");
-  const [isGenerating, setIsGenerating] = React.useState(false);
+  const handleCreateProject = async () => {
+    if (!selectedType || !projectName) return
 
-  React.useEffect(() => {
-    if (!user) {
-      router.push("/sign-in");
-    }
-  }, [user, router]);
-
-  const addKeyword = () => {
-    if (newKeyword.trim() && !keywords.includes(newKeyword.trim())) {
-      setKeywords([...keywords, newKeyword.trim()]);
-      setNewKeyword("");
-    }
-  };
-
-  const removeKeyword = (keyword: string) => {
-    setKeywords(keywords.filter(k => k !== keyword));
-  };
-
-  const handleGenerate = async () => {
-    if (!selectedMode || !selectedStyle || !selectedPlatform || !brief) {
-      return;
-    }
-
-    setIsGenerating(true);
+    setIsGenerating(true)
     
     try {
-      // Here you would call your AI generation API
-      // For now, we'll simulate the process
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      // Navigate to the editor/workspace
-      router.push(`/create/${selectedMode}/workspace`);
-    } catch (error) {
-      console.error("Generation failed:", error);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+      const response = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          projectName,
+          description,
+          type: selectedType,
+          mode: selectedMode,
+        }),
+      })
 
-  if (!user) {
-    return null; // or loading component
+      if (response.ok) {
+        const result = await response.json()
+        // Redirect to project editor or results page
+        window.location.href = `/project/${result.projectId}`
+      } else {
+        console.error('Failed to create project')
+      }
+    } catch (error) {
+      console.error('Error creating project:', error)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-aakar-green-50 to-aakar-gold-50 py-8">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto"
-        >
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center bg-aakar-green-100 text-aakar-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Wand2 className="w-4 h-4 mr-2" />
-              AI Design Generation
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50/30">
+      <main className="container mx-auto px-6 py-12 max-w-7xl">
+        {/* Header */}
+        <div className="flex items-center mb-12">
+          <Link href="/dashboard">
+            <Button variant="ghost" size="sm" className="mr-6 hover:bg-designly-purple/5">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
+          <div className="flex items-center space-x-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-designly-purple to-purple-600 rounded-2xl flex items-center justify-center">
+              <Sparkles className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-4xl font-heading font-bold mb-4">
-              Create Your Next <span className="aakar-text-gradient">Masterpiece</span>
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Transform your ideas into stunning designs with our AI-powered creation process
-            </p>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900">Create New Project</h1>
+              <p className="text-gray-600 mt-2 text-lg">Design anything with AI-powered creativity</p>
+            </div>
           </div>
+        </div>
 
-          <Tabs defaultValue="brief" className="space-y-8">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="brief">Project Brief</TabsTrigger>
-              <TabsTrigger value="mode">Design Mode</TabsTrigger>
-              <TabsTrigger value="style">Style & Platform</TabsTrigger>
-              <TabsTrigger value="generate">Generate</TabsTrigger>
-            </TabsList>
+        {/* Progress Steps */}
+        <div className="flex items-center mb-8">
+          <div className={`flex items-center ${step >= 1 ? 'text-designly-purple' : 'text-gray-400'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 1 ? 'bg-designly-purple text-white' : 'bg-gray-200'}`}>
+              1
+            </div>
+            <span className="ml-2 font-medium">Choose Type</span>
+          </div>
+          <ChevronRight className="h-4 w-4 mx-4 text-gray-400" />
+          <div className={`flex items-center ${step >= 2 ? 'text-designly-purple' : 'text-gray-400'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 2 ? 'bg-designly-purple text-white' : 'bg-gray-200'}`}>
+              2
+            </div>
+            <span className="ml-2 font-medium">Project Details</span>
+          </div>
+          <ChevronRight className="h-4 w-4 mx-4 text-gray-400" />
+          <div className={`flex items-center ${step >= 3 ? 'text-designly-purple' : 'text-gray-400'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 3 ? 'bg-designly-purple text-white' : 'bg-gray-200'}`}>
+              3
+            </div>
+            <span className="ml-2 font-medium">AI Generation</span>
+          </div>
+        </div>
 
-            {/* Project Brief Tab */}
-            <TabsContent value="brief" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <FileText className="w-5 h-5 mr-2" />
-                    Project Details
-                  </CardTitle>
-                  <CardDescription>
-                    Tell us about your project and what you want to create
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="project-name">Project Name</Label>
-                    <Input
-                      id="project-name"
-                      placeholder="e.g., Summer Campaign 2024"
-                      value={projectName}
-                      onChange={(e) => setProjectName(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="brief">Design Brief</Label>
-                    <Textarea
-                      id="brief"
-                      placeholder="Describe what you want to create, the message you want to convey, target audience, and any specific requirements..."
-                      value={brief}
-                      onChange={(e) => setBrief(e.target.value)}
-                      rows={6}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Keywords & Tags</Label>
-                    <div className="flex gap-2 mb-2">
-                      <Input
-                        placeholder="Add a keyword..."
-                        value={newKeyword}
-                        onChange={(e) => setNewKeyword(e.target.value)}
-                        onKeyPress={(e) => e.key === "Enter" && addKeyword()}
-                      />
-                      <Button onClick={addKeyword} size="icon" variant="outline">
-                        <Plus className="w-4 h-4" />
-                      </Button>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {keywords.map((keyword) => (
-                        <Badge key={keyword} variant="secondary" className="flex items-center gap-1">
-                          {keyword}
-                          <button onClick={() => removeKeyword(keyword)}>
-                            <X className="w-3 h-3" />
-                          </button>
+        {step === 1 && (
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">What would you like to create?</h2>
+              <p className="text-gray-600 text-lg">Choose a project type to get started with AI-powered design</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projectTypes.map((type) => (
+                <Card 
+                  key={type.id}
+                  className={`cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border-0 group ${
+                    selectedType === type.id 
+                      ? 'ring-2 ring-designly-purple bg-gradient-to-br from-designly-purple/5 to-purple-50 shadow-lg' 
+                      : 'hover:ring-1 hover:ring-designly-purple/30 bg-white shadow-md hover:shadow-xl'
+                  }`}
+                  onClick={() => setSelectedType(type.id)}
+                >
+                  <CardContent className="p-8">
+                    <div className="relative text-center">
+                      {type.popular && (
+                        <Badge className="absolute -top-4 -right-4 bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs font-medium px-3 py-1 shadow-lg">
+                          Popular
                         </Badge>
-                      ))}
+                      )}
+                      
+                      <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${type.gradient} flex items-center justify-center text-white mb-6 transition-transform group-hover:scale-110 ${
+                        selectedType === type.id ? 'scale-110 shadow-lg' : ''
+                      }`}>
+                        {React.cloneElement(type.icon, { className: "h-10 w-10" })}
+                      </div>
+                      
+                      <h3 className="font-bold text-xl text-gray-900 mb-3">{type.name}</h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">{type.description}</p>
+                      
+                      {selectedType === type.id && (
+                        <div className="mt-6 inline-flex items-center text-designly-purple bg-designly-purple/10 px-4 py-2 rounded-full">
+                          <Check className="h-4 w-4 mr-2" />
+                          <span className="text-sm font-semibold">Selected</span>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="flex justify-center mt-12">
+              <Button 
+                onClick={() => setStep(2)}
+                disabled={!selectedType}
+                className="bg-designly-purple hover:bg-designly-purple/90 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Continue to Details
+                <ChevronRight className="h-5 w-5 ml-2" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Project Details</h2>
+              <p className="text-gray-600 text-lg">Tell us about your vision and choose your AI generation mode</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="space-y-8">
+                <div className="bg-white rounded-2xl p-8 shadow-lg">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">Basic Information</h3>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <Label htmlFor="projectName" className="text-base font-semibold text-gray-900 mb-2 block">
+                        Project Name *
+                      </Label>
+                      <Input
+                        id="projectName"
+                        value={projectName}
+                        onChange={(e) => setProjectName(e.target.value)}
+                        placeholder="Enter a descriptive name for your project"
+                        className="h-12 text-lg"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="description" className="text-base font-semibold text-gray-900 mb-2 block">
+                        Description
+                      </Label>
+                      <textarea
+                        id="description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Describe what you want to create. Be specific about style, colors, mood, etc."
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-designly-purple focus:border-transparent h-32 resize-none text-base"
+                      />
+                      <p className="text-sm text-gray-500 mt-2">
+                        💡 The more detailed your description, the better AI results you'll get
+                      </p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                </div>
+              </div>
 
-            {/* Design Mode Tab */}
-            <TabsContent value="mode" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Target className="w-5 h-5 mr-2" />
-                    Choose Design Mode
-                  </CardTitle>
-                  <CardDescription>
-                    Select the type of design you want to create
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {designModes.map((mode) => (
-                      <motion.div
-                        key={mode.id}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <Card
-                          className={`cursor-pointer transition-all duration-200 ${
-                            selectedMode === mode.id
-                              ? "ring-2 ring-aakar-green-500 bg-aakar-green-50"
-                              : "hover:shadow-md"
-                          }`}
-                          onClick={() => setSelectedMode(mode.id)}
-                        >
-                          <CardContent className="p-6 text-center">
-                            <div className={`w-12 h-12 mx-auto mb-4 rounded-lg bg-gradient-to-r ${mode.gradient} flex items-center justify-center`}>
-                              <mode.icon className="w-6 h-6 text-white" />
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">AI Generation Mode</h3>
+                <div className="space-y-4">
+                  {aiModes.map((mode) => (
+                    <Card 
+                      key={mode.id}
+                      className={`cursor-pointer transition-all duration-300 border-0 ${
+                        selectedMode === mode.id 
+                          ? 'ring-2 ring-designly-purple bg-gradient-to-br from-designly-purple/5 to-purple-50 shadow-lg' 
+                          : 'hover:ring-1 hover:ring-designly-purple/30 bg-gray-50 hover:bg-gray-100 shadow-sm'
+                      }`}
+                      onClick={() => setSelectedMode(mode.id)}
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex items-start space-x-4">
+                          <div className={`p-3 rounded-xl transition-colors ${
+                            selectedMode === mode.id 
+                              ? 'bg-designly-purple text-white' 
+                              : 'bg-white text-designly-purple border border-designly-purple/20'
+                          }`}>
+                            {React.cloneElement(mode.icon, { className: "h-6 w-6" })}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-3 mb-2">
+                              <h4 className="font-bold text-gray-900 text-lg">{mode.name}</h4>
+                              {!mode.free && (
+                                <Badge variant="outline" className="text-xs">Premium</Badge>
+                              )}
                             </div>
-                            <h3 className="font-semibold mb-2">{mode.title}</h3>
-                            <p className="text-sm text-muted-foreground">{mode.description}</p>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                            <p className="text-sm text-gray-600 mb-2">{mode.description}</p>
+                            <div className="flex items-center space-x-4 text-xs text-gray-500">
+                              <span>⏱️ {mode.time}</span>
+                              <span>⭐ {mode.quality}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </div>
 
-            {/* Style & Platform Tab */}
-            <TabsContent value="style" className="space-y-6">
-              <div className="grid lg:grid-cols-2 gap-6">
-                {/* Design Style */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Palette className="w-5 h-5 mr-2" />
-                      Design Style
-                    </CardTitle>
-                    <CardDescription>
-                      Choose the visual style for your design
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 gap-3">
-                      {designStyles.map((style) => (
-                        <Card
-                          key={style.id}
-                          className={`cursor-pointer transition-all duration-200 ${
-                            selectedStyle === style.id
-                              ? "ring-2 ring-aakar-green-500 bg-aakar-green-50"
-                              : "hover:shadow-md"
-                          }`}
-                          onClick={() => setSelectedStyle(style.id)}
-                        >
-                          <CardContent className="p-4">
-                            <h4 className="font-medium mb-1">{style.name}</h4>
-                            <p className="text-xs text-muted-foreground">{style.description}</p>
-                          </CardContent>
-                        </Card>
-                      ))}
+            <div className="flex justify-between items-center mt-12">
+              <Button 
+                variant="outline"
+                onClick={() => setStep(1)}
+                className="px-6 py-3 text-base font-medium border-2 hover:bg-gray-50"
+              >
+                <ArrowLeft className="h-5 w-5 mr-2" />
+                Back
+              </Button>
+              <Button 
+                onClick={() => setStep(3)}
+                disabled={!projectName}
+                className="bg-designly-purple hover:bg-designly-purple/90 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Continue to Generation
+                <ChevronRight className="h-5 w-5 ml-2" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to Generate</h2>
+              <p className="text-gray-600 text-lg">Review your project details and start the AI generation</p>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div>
+                <Card className="border-0 bg-gradient-to-br from-designly-purple/5 to-purple-50 shadow-lg">
+                  <CardContent className="p-8">
+                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                      <FileText className="h-6 w-6 mr-3 text-designly-purple" />
+                      Project Summary
+                    </h3>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600">Type:</span>
+                        <span className="font-medium">
+                          {projectTypes.find(t => t.id === selectedType)?.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600">Name:</span>
+                        <span className="font-medium">{projectName}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600">AI Mode:</span>
+                        <span className="font-medium">
+                          {aiModes.find(m => m.id === selectedMode)?.name}
+                        </span>
+                      </div>
+                      {description && (
+                        <div>
+                          <span className="text-gray-600">Description:</span>
+                          <p className="text-sm mt-1 text-gray-800">{description}</p>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* Platform & Size */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Monitor className="w-5 h-5 mr-2" />
-                      Platform & Size
-                    </CardTitle>
-                    <CardDescription>
-                      Select the platform and dimensions
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+                <Card className="mt-6">
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">What happens next?</h3>
                     <div className="space-y-3">
-                      {platforms.map((platform) => (
-                        <Card
-                          key={platform.id}
-                          className={`cursor-pointer transition-all duration-200 ${
-                            selectedPlatform === platform.id
-                              ? "ring-2 ring-aakar-green-500 bg-aakar-green-50"
-                              : "hover:shadow-md"
-                          }`}
-                          onClick={() => setSelectedPlatform(platform.id)}
-                        >
-                          <CardContent className="p-4 flex justify-between items-center">
-                            <div>
-                              <h4 className="font-medium">{platform.name}</h4>
-                              <p className="text-xs text-muted-foreground">{platform.platform}</p>
-                            </div>
-                            <Badge variant="outline">{platform.dimensions}</Badge>
-                          </CardContent>
-                        </Card>
-                      ))}
+                      <div className="flex items-start space-x-3">
+                        <div className="w-6 h-6 rounded-full bg-designly-purple text-white flex items-center justify-center text-xs font-medium">1</div>
+                        <div>
+                          <p className="font-medium text-gray-900">AI Analysis</p>
+                          <p className="text-sm text-gray-600">AI analyzes your requirements</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-6 h-6 rounded-full bg-designly-purple text-white flex items-center justify-center text-xs font-medium">2</div>
+                        <div>
+                          <p className="font-medium text-gray-900">Generation</p>
+                          <p className="text-sm text-gray-600">Multiple design variants are created</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-6 h-6 rounded-full bg-designly-purple text-white flex items-center justify-center text-xs font-medium">3</div>
+                        <div>
+                          <p className="font-medium text-gray-900">Customization</p>
+                          <p className="text-sm text-gray-600">Edit and refine your chosen design</p>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
-            </TabsContent>
 
-            {/* Generate Tab */}
-            <TabsContent value="generate" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Zap className="w-5 h-5 mr-2" />
-                    Ready to Generate
-                  </CardTitle>
-                  <CardDescription>
-                    Review your selections and start the AI generation process
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Summary */}
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="p-4 bg-muted/50 rounded-lg">
-                      <h4 className="font-medium text-sm text-muted-foreground mb-1">PROJECT</h4>
-                      <p className="font-medium">{projectName || "Untitled Project"}</p>
-                    </div>
-                    <div className="p-4 bg-muted/50 rounded-lg">
-                      <h4 className="font-medium text-sm text-muted-foreground mb-1">MODE</h4>
-                      <p className="font-medium">
-                        {designModes.find(m => m.id === selectedMode)?.title || "Not selected"}
-                      </p>
-                    </div>
-                    <div className="p-4 bg-muted/50 rounded-lg">
-                      <h4 className="font-medium text-sm text-muted-foreground mb-1">STYLE</h4>
-                      <p className="font-medium">
-                        {designStyles.find(s => s.id === selectedStyle)?.name || "Not selected"}
-                      </p>
-                    </div>
-                    <div className="p-4 bg-muted/50 rounded-lg">
-                      <h4 className="font-medium text-sm text-muted-foreground mb-1">PLATFORM</h4>
-                      <p className="font-medium">
-                        {platforms.find(p => p.id === selectedPlatform)?.name || "Not selected"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Brief Preview */}
-                  {brief && (
-                    <div className="p-4 bg-muted/50 rounded-lg">
-                      <h4 className="font-medium text-sm text-muted-foreground mb-2">BRIEF</h4>
-                      <p className="text-sm">{brief}</p>
-                    </div>
-                  )}
-
-                  {/* Keywords */}
-                  {keywords.length > 0 && (
-                    <div>
-                      <h4 className="font-medium text-sm text-muted-foreground mb-2">KEYWORDS</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {keywords.map((keyword) => (
-                          <Badge key={keyword} variant="secondary">{keyword}</Badge>
-                        ))}
+              <div className="flex items-center justify-center">
+                {isGenerating ? (
+                  <Card className="w-full max-w-md">
+                    <CardContent className="p-8 text-center">
+                      <div className="animate-spin rounded-full h-16 w-16 border-4 border-designly-purple border-t-transparent mx-auto mb-4"></div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Generating Your Design</h3>
+                      <p className="text-gray-600 mb-4">AI is creating amazing designs for you...</p>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-designly-purple h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
                       </div>
-                    </div>
-                  )}
+                      <p className="text-sm text-gray-500 mt-2">This may take a few moments</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <Card className="w-full max-w-md">
+                    <CardContent className="p-8 text-center">
+                      <div className="w-16 h-16 bg-gradient-to-br from-designly-purple to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Rocket className="h-8 w-8 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Ready to Launch</h3>
+                      <p className="text-gray-600 mb-6">Click the button below to start AI generation</p>
+                      <Button 
+                        onClick={handleCreateProject}
+                        className="w-full bg-designly-purple hover:bg-designly-purple/90 text-white"
+                        size="lg"
+                      >
+                        <Sparkles className="h-5 w-5 mr-2" />
+                        Generate with AI
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            </div>
 
-                  {/* Generate Button */}
-                  <div className="flex justify-center pt-4">
-                    <Button
-                      size="xl"
-                      variant="primary"
-                      onClick={handleGenerate}
-                      loading={isGenerating}
-                      disabled={!selectedMode || !selectedStyle || !selectedPlatform || !brief}
-                      className="px-12"
-                    >
-                      {isGenerating ? (
-                        "Generating Your Design..."
-                      ) : (
-                        <>
-                          Generate Design
-                          <ArrowRight className="ml-2 w-5 h-5" />
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </motion.div>
-      </div>
+            {!isGenerating && (
+              <div className="flex justify-between mt-8">
+                <Button 
+                  variant="outline"
+                  onClick={() => setStep(2)}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
     </div>
-  );
+  )
 }

@@ -10,9 +10,10 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-        primary: "bg-aakar-green-600 text-white hover:bg-aakar-green-700 hover:shadow-lg active:scale-95",
-        secondary: "bg-transparent text-aakar-green-700 border-2 border-aakar-green-700 hover:bg-aakar-green-700 hover:text-white",
-        gold: "bg-aakar-gold-500 text-white hover:bg-aakar-gold-600 hover:shadow-lg active:scale-95",
+        primary: "bg-designly-purple-600 text-white hover:bg-designly-purple-700 hover:shadow-lg active:scale-95 designly-hover-lift",
+        secondary: "bg-transparent text-designly-purple-700 border-2 border-designly-purple-700 hover:bg-designly-purple-700 hover:text-white designly-hover-lift",
+        emerald: "bg-designly-emerald-500 text-white hover:bg-designly-emerald-600 hover:shadow-lg active:scale-95 designly-hover-lift",
+        gradient: "designly-gradient text-white hover:opacity-90 designly-hover-lift animate-pulse-glow",
         destructive: "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20",
         outline: "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
         ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -48,7 +49,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         ref={ref}
-        data-slot="button"
         className={cn(buttonVariants({ variant, size, className }))}
         disabled={disabled || loading}
         {...props}

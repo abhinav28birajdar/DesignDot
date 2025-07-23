@@ -1,66 +1,97 @@
 import Link from "next/link"
-import { Palette } from "lucide-react"
+import { Palette, Heart, Mail, MapPin, Phone } from "lucide-react"
 
 export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="container-fluid max-w-7xl py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Logo and Description */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-orange-600 p-2 rounded-lg">
-                <Palette className="h-6 w-6 text-white" />
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+                <Palette className="h-7 w-7 text-white" />
               </div>
-              <span className="text-2xl font-bold">Aakar</span>
+              <div>
+                <span className="text-2xl font-bold designly-text-gradient">Design.ly</span>
+                <div className="text-sm text-gray-400">AI-Powered Creative Engine</div>
+              </div>
             </div>
-            <p className="text-gray-400 mb-4">
-              AI-powered design companion that helps you create stunning visuals with intelligent suggestions and
-              seamless Adobe Express integration.
+            <p className="text-gray-400 text-lg leading-relaxed mb-6 max-w-md">
+              Revolutionizing creativity with AI-powered design tools. Create stunning visuals, 
+              logos, and marketing materials in seconds, not hours.
             </p>
+            <div className="flex items-center space-x-2 text-gray-400">
+              <span>Made with</span>
+              <Heart className="h-4 w-4 text-red-500 fill-current" />
+              <span>for creators worldwide</span>
+            </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="text-lg font-bold mb-6 text-white">Quick Links</h3>
+            <ul className="space-y-3">
               <li>
-                <Link href="/create" className="text-gray-400 hover:text-orange-400 transition-colors">
+                <Link href="/create" className="text-gray-400 hover:text-purple-400 transition-colors duration-200 flex items-center">
                   Create Design
                 </Link>
               </li>
               <li>
-                <Link href="/explore" className="text-gray-400 hover:text-orange-400 transition-colors">
+                <Link href="/explore" className="text-gray-400 hover:text-purple-400 transition-colors duration-200">
                   Explore Gallery
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="text-gray-400 hover:text-orange-400 transition-colors">
-                  Dashboard
+                <Link href="/explore/ai-insights" className="text-gray-400 hover:text-purple-400 transition-colors duration-200">
+                  AI Insights
                 </Link>
               </li>
               <li>
-                <Link href="/profile" className="text-gray-400 hover:text-orange-400 transition-colors">
-                  Profile
+                <Link href="/templates" className="text-gray-400 hover:text-purple-400 transition-colors duration-200">
+                  Templates
+                </Link>
+              </li>
+              <li>
+                <Link href="/tutorials" className="text-gray-400 hover:text-purple-400 transition-colors duration-200">
+                  Tutorials
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Support</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/help" className="text-gray-400 hover:text-orange-400 transition-colors">
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-400 hover:text-orange-400 transition-colors">
-                  Contact Us
-                </Link>
-              </li>
+            <h3 className="text-lg font-bold mb-6 text-white">Contact</h3>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 text-gray-400">
+                <Mail className="h-5 w-5 text-purple-400" />
+                <div>
+                  <div className="text-sm font-medium text-white">Email</div>
+                  <div className="text-sm">hello@design.ly</div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3 text-gray-400">
+                <Phone className="h-5 w-5 text-purple-400" />
+                <div>
+                  <div className="text-sm font-medium text-white">Phone</div>
+                  <div className="text-sm">+1 (555) 123-4567</div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3 text-gray-400">
+                <MapPin className="h-5 w-5 text-purple-400" />
+                <div>
+                  <div className="text-sm font-medium text-white">Address</div>
+                  <div className="text-sm">San Francisco, CA</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Legal Links */}
+          <div>
+            <h3 className="text-lg font-bold mb-6 text-white">Legal</h3>
+            <ul className="space-y-3">
               <li>
                 <Link href="/privacy" className="text-gray-400 hover:text-orange-400 transition-colors">
                   Privacy Policy
@@ -76,7 +107,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 Aakar. All rights reserved.</p>
+          <p>&copy; 2024 Design.ly. All rights reserved.</p>
         </div>
       </div>
     </footer>

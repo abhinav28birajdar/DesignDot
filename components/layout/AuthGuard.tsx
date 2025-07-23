@@ -29,7 +29,7 @@ export function AuthGuard({ children, requireAuth = true }: AuthGuardProps) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-orange-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-designly-purple-500" />
       </div>
     )
   }
