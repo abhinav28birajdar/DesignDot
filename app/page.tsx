@@ -1,5 +1,5 @@
-import DesignlyHomePage from "./designly-home-new";
+import { redirect } from 'next/navigation'
 
 export default function HomePage() {
-  return <DesignlyHomePage />;
+  redirect('/dashboard')
 }
