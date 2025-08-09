@@ -1,8 +1,14 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from 'react';
-import { Stage, Layer, Image as KonvaImage, Text as KonvaText, Rect } from 'react-konva';
-import { KonvaEventObject } from 'konva/lib/Node';
+import dynamic from 'next/dynamic';
+
+// Dynamic import to handle SSR issues with Konva
+const Stage = dynamic(() => import('react-konva').then(mod => mod.Stage), { ssr: false });
+const Layer = dynamic(() => import('react-konva').then(mod => mod.Layer), { ssr: false });
+const KonvaImage = dynamic(() => import('react-konva').then(mod => mod.Image), { ssr: false });
+const KonvaText = dynamic(() => import('react-konva').then(mod => mod.Text), { ssr: false });
+const Rect = dynamic(() => import('react-konva').then(mod => mod.Rect), { ssr: false });
 import { 
   Move, 
   ZoomIn, 
@@ -49,6 +55,7 @@ export function DesignCanvas({
   initialElements = [],
   onSave
 }: DesignCanvasProps) {
+  const [isClient, setIsClient] = useState(false);
   const [elements, setElements] = useState<CanvasElement[]>(initialElements);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [tool, setTool] = useState<'select' | 'text' | 'image' | 'shape'>('select');
@@ -57,11 +64,36 @@ export function DesignCanvas({
   const [isDragging, setIsDragging] = useState(false);
   const [history, setHistory] = useState<CanvasElement[][]>([initialElements]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const [stageSize, setStageSize] = useState({ width: 800, height: 600 });
   const stageRef = useRef<any>(null);
   const imageRefs = useRef<{ [key: string]: HTMLImageElement }>({});
 
+  // Check if we're on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Handle window resize
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const updateStageSize = () => {
+      setStageSize({
+        width: window.innerWidth,
+        height: window.innerHeight - 120
+      });
+    };
+
+    updateStageSize();
+    window.addEventListener('resize', updateStageSize);
+    
+    return () => window.removeEventListener('resize', updateStageSize);
+  }, []);
+
   // Initialize image refs for Konva
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     elements.forEach(element => {
       if (element.type === 'image' && element.src && !imageRefs.current[element.id]) {
         const img = new window.Image();
@@ -114,7 +146,7 @@ export function DesignCanvas({
     setIsDragging(false);
   };
 
-  const handleStageWheel = (e: KonvaEventObject<WheelEvent>) => {
+  const handleStageWheel = (e: any) => {
     e.evt.preventDefault();
     
     const scaleBy = 1.1;
@@ -142,14 +174,14 @@ export function DesignCanvas({
     setSelectedId(id);
   };
 
-  const handleStageDragMove = (e: KonvaEventObject<DragEvent>) => {
+  const handleStageDragMove = (e: any) => {
     setPosition({
       x: e.target.x(),
       y: e.target.y(),
     });
   };
 
-  const handleElementDragMove = (e: KonvaEventObject<DragEvent>, id: string) => {
+  const handleElementDragMove = (e: any, id: string) => {
     const updatedElements = elements.map(element => {
       if (element.id === id) {
         return {
@@ -182,6 +214,8 @@ export function DesignCanvas({
   };
 
   const handleAddImage = () => {
+    if (typeof window === 'undefined') return;
+    
     // This would typically open a file picker or image gallery
     // For demo purposes, we'll use a placeholder
     const newId = `image-${Date.now()}`;
@@ -330,11 +364,19 @@ export function DesignCanvas({
         </div>
       </div>
       <div className="flex-1 bg-gray-100 overflow-hidden relative">
-        <div className="absolute inset-0 flex items-center justify-center">
+        {!isClient ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-designly-purple-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading design canvas...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
           <Stage
             ref={stageRef}
-            width={window.innerWidth}
-            height={window.innerHeight - 120} // Approximate height after navbar and toolbars
+            width={stageSize.width}
+            height={stageSize.height}
             scaleX={scale}
             scaleY={scale}
             x={position.x}
@@ -432,6 +474,7 @@ export function DesignCanvas({
             </Layer>
           </Stage>
         </div>
+        )}
       </div>
     </div>
   );

@@ -116,7 +116,7 @@ export default function SignInPage() {
                   <Checkbox
                     id="keep-signed-in"
                     checked={keepSignedIn}
-                    onCheckedChange={setKeepSignedIn}
+                    onCheckedChange={(checked) => setKeepSignedIn(checked === true)}
                   />
                   <Label
                     htmlFor="keep-signed-in"

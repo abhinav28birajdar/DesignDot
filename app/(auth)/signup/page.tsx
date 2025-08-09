@@ -214,7 +214,7 @@ export default function SignUpPage() {
                 <Checkbox
                   id="agree-terms"
                   checked={agreeToTerms}
-                  onCheckedChange={setAgreeToTerms}
+                  onCheckedChange={(checked) => setAgreeToTerms(checked === true)}
                   className="mt-1"
                 />
                 <Label
