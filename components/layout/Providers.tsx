@@ -4,7 +4,7 @@ import type React from "react";
 import Link from "next/link";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SocketProvider } from "@/contexts/SocketContext";
-import { Palette, Search, Bell, Menu, ChevronDown, User, Settings, LogOut } from "lucide-react";
+import { Palette, Search, Bell, Menu, ChevronDown, User, Settings, LogOut, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -42,10 +42,16 @@ function Navbar() {
                 Dashboard
               </Link>
               <Link
-                href="/explore"
+                href="/community"
                 className="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium"
               >
-                Explore
+                Community
+              </Link>
+              <Link
+                href="/marketplace"
+                className="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+              >
+                Marketplace
               </Link>
               <div className="relative group">
                 <button className="text-gray-500 group-hover:text-gray-900 px-3 py-2 text-sm font-medium flex items-center">
@@ -61,10 +67,10 @@ function Navbar() {
                       New Design
                     </Link>
                     <Link
-                      href="/create/brand"
+                      href="/share"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Brand Profile
+                      Share Work
                     </Link>
                     <Link
                       href="/create/template"
@@ -86,10 +92,10 @@ function Navbar() {
             </button>
 
             {/* Notifications */}
-            <button className="text-gray-500 hover:text-gray-900 relative">
+            <Link href="/notifications" className="text-gray-500 hover:text-gray-900 relative">
               <Bell className="h-5 w-5" />
               <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-designly-purple-500 ring-2 ring-white" />
-            </button>
+            </Link>
 
             {/* Mobile Menu (visible on small screens) */}
             <div className="md:hidden">
@@ -124,13 +130,23 @@ function Navbar() {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="flex items-center">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
+                    <DropdownMenuItem asChild>
+                      <Link href="/messages" className="flex items-center">
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        <span>Messages</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/settings" className="flex items-center">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => signOut()}>
